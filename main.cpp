@@ -16,12 +16,27 @@ private:
     char board[BOARD_SIZE][BOARD_SIZE]{};
     string player1;
     string player2;
+
     void initPlayers();
+
     void play();
+
     void showBoard();
-    int* getStep(bool player);
-    bool stepIsCorrect(int* step);
-    void setStep(int* step, bool player);
+
+    char checkLines();
+
+    char checkColumns();
+
+    char checkDiagonals();
+
+
+
+    int *getStep(bool player);
+
+    bool stepIsCorrect(int *step);
+
+    void setStep(int *step, bool player);
+
 public:
     void start();
 
@@ -32,10 +47,10 @@ public:
 void Game::initPlayers() {
     string name1;
     string name2;
-    cout << "Print first player's name: "<< endl;
+    cout << "Print first player's name: " << endl;
     getline(cin, name1);
 
-    cout << "Print second player's name: "<< endl;
+    cout << "Print second player's name: " << endl;
     getline(cin, name2);
     player1 = std::move(name1);
     player2 = std::move(name2);
@@ -71,6 +86,63 @@ void Game::showBoard() {
     }
 }
 
+char Game::checkLines() {
+
+    for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 11; j++) { /* check lines */
+            if (board[i][j] == board[i][j + 1] &&
+                board[i][j] == board[i][j + 2] &&
+                board[i][j] == board[i][j + 3] &&
+                board[i][j] == board[i][j + 4]) {
+                cout << board[i][j] << endl;
+                return board[i][j];
+            }
+        }
+    }
+    return ' ';
+}
+
+char Game::checkColumns() {
+    for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 11; j++) { /* check columns */
+            if (board[i][j] == board[i + 1][j] &&
+                board[i][j] == board[i + 2][j] &&
+                board[i][j] == board[i + 3][j] &&
+                board[i][j] == board[i + 4][j]) {
+                cout << board[i][j] << endl;
+                return board[i][j];
+            }
+        }
+    }
+    return ' ';
+}
+
+char Game::checkDiagonals() {
+    for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 11; j++) { /* check diagonals */
+            if (board[i][j] == board[i + 1][j + 1] &&
+                board[i + 1][j + 1] == board[i + 2][j + 2] &&
+                board[i + 2][j + 2] == board[i + 3][j + 3] &&
+                board[i + 3][j + 3] == board[i + 4][j + 4]) {
+                cout << board[i][j] << endl;
+                return board[i][j];
+            }
+        }
+    }
+    return ' ';
+
+//    for (int i = 0; i < 11; i++) {
+//        for (int j = 0; j < 11; j++) {
+//            if (board[i][j + 4] == board[i + 1][j + 3] &&
+//                board[i + 1][j + 3] == board[i + 2][j + 2] &&
+//                board[i + 2][j + 2] == board[i + 3][j + 1] &&
+//                board[i + 3][j + 1] == board[i + 4][j]) {
+//                cout << board[0][2] << endl;
+//                return board[0][2];
+//            }
+//        }
+//    }
+}
 
 bool Game::stepIsCorrect(int *step) {
     if (step[0] < BOARD_SIZE && step[1] < BOARD_SIZE && (int) board[step[0]][step[1]] == 0) {
@@ -82,7 +154,7 @@ bool Game::stepIsCorrect(int *step) {
 }
 
 
-int* Game::getStep(bool player) {
+int *Game::getStep(bool player) {
     bool correctStep = false;
     char step[3];
     static int intStep[2];
@@ -95,13 +167,13 @@ int* Game::getStep(bool player) {
         cin.get(step, 4);
         cin.ignore();
 
-        if ((int)step[0] >= (int)'0' && (int)step[0] <= (int)'9') {
+        if ((int) step[0] >= (int) '0' && (int) step[0] <= (int) '9') {
             intStep[0] = step[0] - '0';
         } else {
             intStep[0] = 10 + step[0] - 'A';
         }
 
-        if ((int)step[2] >= (int)'0' && (int)step[2] <= (int)'9') {
+        if ((int) step[2] >= (int) '0' && (int) step[2] <= (int) '9') {
             intStep[1] = step[2] - '0';
         } else {
             intStep[1] = 10 + step[2] - 'A';
@@ -120,16 +192,62 @@ void Game::setStep(int *step, bool player) {
     }
 }
 
+
 void Game::play() {
     showBoard();
     bool gameOver = false;
     bool player = true;
+    char winner = ' ';
 
+//    while (!gameOver) {
+//        int* steps = getStep(player);
+//        setStep(steps, player);
+//        showBoard();
+//        player = !player;
+//    }
     while (!gameOver) {
-        int* steps = getStep(player);
+        int *steps = getStep(player);
         setStep(steps, player);
         showBoard();
+
+        winner = checkLines();
+        if (winner == 'X') {
+            cout << "X won!";
+            gameOver = true;
+        } else if (winner == 'O') {
+            cout << "O won!";
+            gameOver = true;
+        }
+
+        winner = checkColumns();
+
+        if (winner == 'X') {
+            cout << "X won!";
+            gameOver = true;
+        } else if (winner == 'O') {
+            cout << "O won!";
+            gameOver = true;
+        }
+
+        winner = checkDiagonals();
+
+        if (winner == 'X') {
+            cout << "X won!";
+            gameOver = true;
+        } else if (winner == 'O') {
+            cout << "O won!";
+            gameOver = true;
+        }
+
         player = !player;
+
+        if (winner == 'X') {
+            cout << "X won!";
+            gameOver = true;
+        } else if (winner == 'O') {
+            cout << "O won!";
+            gameOver = true;
+        }
     }
 }
 

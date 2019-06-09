@@ -3,3 +3,5 @@
 
 CMakeFiles/tic_tac_toe.dir/main.cpp.obj: ../main.cpp
 
+CMakeFiles/tic_tac_toe.dir/winning.cpp.obj: ../winning.cpp
+
