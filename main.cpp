@@ -29,7 +29,7 @@ private:
 
     char checkDiagonals();
 
-
+    bool win(char winner);
 
     int *getStep(bool player);
 
@@ -94,7 +94,6 @@ char Game::checkLines() {
                 board[i][j] == board[i][j + 2] &&
                 board[i][j] == board[i][j + 3] &&
                 board[i][j] == board[i][j + 4]) {
-                cout << board[i][j] << endl;
                 return board[i][j];
             }
         }
@@ -109,7 +108,6 @@ char Game::checkColumns() {
                 board[i][j] == board[i + 2][j] &&
                 board[i][j] == board[i + 3][j] &&
                 board[i][j] == board[i + 4][j]) {
-                cout << board[i][j] << endl;
                 return board[i][j];
             }
         }
@@ -124,7 +122,6 @@ char Game::checkDiagonals() {
                 board[i + 1][j + 1] == board[i + 2][j + 2] &&
                 board[i + 2][j + 2] == board[i + 3][j + 3] &&
                 board[i + 3][j + 3] == board[i + 4][j + 4]) {
-                cout << board[i][j] << endl;
                 return board[i][j];
             }
         }
@@ -152,7 +149,6 @@ bool Game::stepIsCorrect(int *step) {
         return false;
     }
 }
-
 
 int *Game::getStep(bool player) {
     bool correctStep = false;
@@ -192,6 +188,16 @@ void Game::setStep(int *step, bool player) {
     }
 }
 
+bool Game::win(char winner) {
+    if (winner == 'X') {
+        cout << player1 << " WON!";
+        return true;
+    } else if (winner == 'O') {
+        cout << player2 << " WON!";
+        return true;
+    }
+    return false;
+}
 
 void Game::play() {
     showBoard();
@@ -199,55 +205,27 @@ void Game::play() {
     bool player = true;
     char winner = ' ';
 
-//    while (!gameOver) {
-//        int* steps = getStep(player);
-//        setStep(steps, player);
-//        showBoard();
-//        player = !player;
-//    }
     while (!gameOver) {
         int *steps = getStep(player);
         setStep(steps, player);
         showBoard();
 
         winner = checkLines();
-        if (winner == 'X') {
-            cout << "X won!";
-            gameOver = true;
-        } else if (winner == 'O') {
-            cout << "O won!";
+        if (win(winner)) {
             gameOver = true;
         }
 
         winner = checkColumns();
-
-        if (winner == 'X') {
-            cout << "X won!";
-            gameOver = true;
-        } else if (winner == 'O') {
-            cout << "O won!";
+        if (win(winner)) {
             gameOver = true;
         }
 
         winner = checkDiagonals();
-
-        if (winner == 'X') {
-            cout << "X won!";
-            gameOver = true;
-        } else if (winner == 'O') {
-            cout << "O won!";
+        if (win(winner)) {
             gameOver = true;
         }
 
         player = !player;
-
-        if (winner == 'X') {
-            cout << "X won!";
-            gameOver = true;
-        } else if (winner == 'O') {
-            cout << "O won!";
-            gameOver = true;
-        }
     }
 }
 
