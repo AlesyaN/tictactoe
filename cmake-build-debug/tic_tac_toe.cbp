@@ -83,9 +83,12 @@
 		<Unit filename="C:/AinaArd/tictactoe/main.cpp">
 			<Option target="tic_tac_toe"/>
 		</Unit>
+<<<<<<< Updated upstream
 		<Unit filename="C:/AinaArd/tictactoe/winning.cpp">
 			<Option target="tic_tac_toe"/>
 		</Unit>
+=======
+>>>>>>> Stashed changes
 		<Unit filename="C:/AinaArd/tictactoe/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

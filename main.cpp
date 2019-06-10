@@ -229,7 +229,6 @@ void Game::play() {
     }
 }
 
-
 void Game::start() {
     cout << "*******   WELCOME TO TIC TAC TOE!   *******" << endl;
     initPlayers();
