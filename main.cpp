@@ -29,6 +29,8 @@ private:
 
     char checkDiagonals();
 
+    bool check(int *step);
+
     bool win(char winner);
 
     int *getStep(bool player);
@@ -127,18 +129,42 @@ char Game::checkDiagonals() {
         }
     }
     return ' ';
+}
 
-//    for (int i = 0; i < 11; i++) {
-//        for (int j = 0; j < 11; j++) {
-//            if (board[i][j + 4] == board[i + 1][j + 3] &&
-//                board[i + 1][j + 3] == board[i + 2][j + 2] &&
-//                board[i + 2][j + 2] == board[i + 3][j + 1] &&
-//                board[i + 3][j + 1] == board[i + 4][j]) {
-//                cout << board[0][2] << endl;
-//                return board[0][2];
-//            }
-//        }
-//    }
+bool Game::check(int *step) {
+    static int playerStep[2];
+    int count = 0;
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+
+            cout << i << j << board[i][j] << " ";
+
+            if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
+                if (i == 0 & j == 0) {
+                    cout << "same cell" << endl;
+                } else {
+                    count++;
+                    cout << count << endl;
+                }
+            } else {
+                cout << "not equal" << endl;
+            }
+            if (count == 5) {
+                return true;
+            }
+        }
+
+    }
+    return false;
+}
+
+int checkNext(int *step, int i, int j, int n) {
+    int count = 5;
+    if (n == 5) {
+        return count;
+    }
+    count = n + checkNext(step, i, j, n);
+    return count;
 }
 
 bool Game::stepIsCorrect(int *step) {
@@ -207,23 +233,28 @@ void Game::play() {
 
     while (!gameOver) {
         int *steps = getStep(player);
+
         setStep(steps, player);
+        if (check(steps)) {
+            gameOver = true;
+        }
         showBoard();
 
-        winner = checkLines();
-        if (win(winner)) {
-            gameOver = true;
-        }
 
-        winner = checkColumns();
-        if (win(winner)) {
-            gameOver = true;
-        }
-
-        winner = checkDiagonals();
-        if (win(winner)) {
-            gameOver = true;
-        }
+//        winner = checkLines();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
+//
+//        winner = checkColumns();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
+//
+//        winner = checkDiagonals();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
 
         player = !player;
     }
@@ -234,7 +265,6 @@ void Game::start() {
     initPlayers();
     play();
 }
-
 
 int main() {
     Game.start();

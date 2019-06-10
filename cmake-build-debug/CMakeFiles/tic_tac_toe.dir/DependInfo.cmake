@@ -5,10 +5,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/AinaArd/tictactoe/main.cpp" "C:/AinaArd/tictactoe/cmake-build-debug/CMakeFiles/tic_tac_toe.dir/main.cpp.obj"
-<<<<<<< Updated upstream
-  "C:/AinaArd/tictactoe/winning.cpp" "C:/AinaArd/tictactoe/cmake-build-debug/CMakeFiles/tic_tac_toe.dir/winning.cpp.obj"
-=======
->>>>>>> Stashed changes
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
