@@ -137,14 +137,8 @@ bool Game::check(int *step) {
     int count = 1;
     for (int i = -1; i < 2; i++) {
         for (int j = -1; j < 2; j++) {
-
-            cout << i << j << board[i][j] << " ";
-
             if (checkCell(step, i, j, count)) {
-                cout << "working" << endl;
                 return true;
-            } else {
-                cout << "not working" << endl;
             }
         }
     }
@@ -153,28 +147,22 @@ bool Game::check(int *step) {
 
 bool Game::checkCell(int *step, int i, int j, int count) {
     static int playerStep[2];
-
-    if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
-        if (i == 0 & j == 0) {
-            cout << "same cell" << endl;
-            return false;
-        } else {
-            count++;
-            cout << count << endl;
-            if (count == 5) {
-                cout << "finish" << endl;
-//                TODO: break;
-                return true;
-            }
-            playerStep[0] = step[0] + i;
-            playerStep[1] = step[1] + j;
-            checkCell(playerStep, i, j, count);
-        }
+    if (count == 5) {
+        return true;
     } else {
-        cout << "not equal" << endl;
-        return false;
+        if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
+            if (i == 0 & j == 0) {
+                return false;
+            } else {
+                count++;
+                playerStep[0] = step[0] + i;
+                playerStep[1] = step[1] + j;
+                checkCell(playerStep, i, j, count);
+            }
+        } else {
+            return false;
+        }
     }
-    return false;
 }
 
 bool Game::stepIsCorrect(int *step) {
