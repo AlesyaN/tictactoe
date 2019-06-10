@@ -31,6 +31,8 @@ private:
 
     bool check(int *step);
 
+    bool checkCell(int *step, int i, int j, int n);
+
     bool win(char winner);
 
     int *getStep(bool player);
@@ -132,39 +134,47 @@ char Game::checkDiagonals() {
 }
 
 bool Game::check(int *step) {
-    static int playerStep[2];
-    int count = 0;
+    int count = 1;
     for (int i = -1; i < 2; i++) {
         for (int j = -1; j < 2; j++) {
 
             cout << i << j << board[i][j] << " ";
 
-            if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
-                if (i == 0 & j == 0) {
-                    cout << "same cell" << endl;
-                } else {
-                    count++;
-                    cout << count << endl;
-                }
-            } else {
-                cout << "not equal" << endl;
-            }
-            if (count == 5) {
+            if (checkCell(step, i, j, count)) {
+                cout << "working" << endl;
                 return true;
+            } else {
+                cout << "not working" << endl;
             }
         }
-
     }
     return false;
 }
 
-int checkNext(int *step, int i, int j, int n) {
-    int count = 5;
-    if (n == 5) {
-        return count;
+bool Game::checkCell(int *step, int i, int j, int count) {
+    static int playerStep[2];
+
+    if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
+        if (i == 0 & j == 0) {
+            cout << "same cell" << endl;
+            return false;
+        } else {
+            count++;
+            cout << count << endl;
+            if (count == 5) {
+                cout << "finish" << endl;
+//                TODO: break;
+                return true;
+            }
+            playerStep[0] = step[0] + i;
+            playerStep[1] = step[1] + j;
+            checkCell(playerStep, i, j, count);
+        }
+    } else {
+        cout << "not equal" << endl;
+        return false;
     }
-    count = n + checkNext(step, i, j, n);
-    return count;
+    return false;
 }
 
 bool Game::stepIsCorrect(int *step) {
@@ -238,7 +248,9 @@ void Game::play() {
         if (check(steps)) {
             gameOver = true;
         }
+
         showBoard();
+        player = !player;
 
 
 //        winner = checkLines();
@@ -256,7 +268,7 @@ void Game::play() {
 //            gameOver = true;
 //        }
 
-        player = !player;
+
     }
 }
 
