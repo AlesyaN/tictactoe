@@ -231,8 +231,21 @@ void Game::play() {
 
 void Game::start() {
     cout << "*******   WELCOME TO TIC TAC TOE!   *******" << endl;
-    initPlayers();
-    play();
+    string mode;
+    bool gameStarted = false;
+    while (!gameStarted) {
+        cout << "Choose game mode: \n 0 - play with computer \n 1 - play with friend" << endl;
+        cin >> mode;
+        if (mode == "0") {
+            cout << "with comp";
+            gameStarted = true;
+        } else if (mode == "1") {
+            initPlayers();
+            play();
+            gameStarted = true;
+        } else cout << "Incorrect input" << endl;
+    }
+
 }
 
 
