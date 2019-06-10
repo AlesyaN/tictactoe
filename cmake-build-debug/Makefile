@@ -47,10 +47,10 @@ RM = "C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\AinaArd\tictactoe
+CMAKE_SOURCE_DIR = C:\Users\Lesya\Programs\c++\tic-tac-toe
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\AinaArd\tictactoe\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -149,33 +149,6 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles\tic_tac_toe.dir\build.make CMakeFiles/tic_tac_toe.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-winning.obj: winning.cpp.obj
-
-.PHONY : winning.obj
-
-# target to build an object file
-winning.cpp.obj:
-	$(MAKE) -f CMakeFiles\tic_tac_toe.dir\build.make CMakeFiles/tic_tac_toe.dir/winning.cpp.obj
-.PHONY : winning.cpp.obj
-
-winning.i: winning.cpp.i
-
-.PHONY : winning.i
-
-# target to preprocess a source file
-winning.cpp.i:
-	$(MAKE) -f CMakeFiles\tic_tac_toe.dir\build.make CMakeFiles/tic_tac_toe.dir/winning.cpp.i
-.PHONY : winning.cpp.i
-
-winning.s: winning.cpp.s
-
-.PHONY : winning.s
-
-# target to generate assembly for a file
-winning.cpp.s:
-	$(MAKE) -f CMakeFiles\tic_tac_toe.dir\build.make CMakeFiles/tic_tac_toe.dir/winning.cpp.s
-.PHONY : winning.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -188,9 +161,6 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... winning.obj
-	@echo ... winning.i
-	@echo ... winning.s
 .PHONY : help
 
 

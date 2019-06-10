@@ -42,10 +42,10 @@ RM = "C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\AinaArd\tictactoe
+CMAKE_SOURCE_DIR = C:\Users\Lesya\Programs\c++\tic-tac-toe
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\AinaArd\tictactoe\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/tic_tac_toe.dir/depend.make
@@ -58,45 +58,30 @@ include CMakeFiles/tic_tac_toe.dir/flags.make
 
 CMakeFiles/tic_tac_toe.dir/main.cpp.obj: CMakeFiles/tic_tac_toe.dir/flags.make
 CMakeFiles/tic_tac_toe.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tic_tac_toe.dir/main.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\tic_tac_toe.dir\main.cpp.obj -c C:\AinaArd\tictactoe\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tic_tac_toe.dir/main.cpp.obj"
+	C:\MinGW64\mingw32\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\tic_tac_toe.dir\main.cpp.obj -c C:\Users\Lesya\Programs\c++\tic-tac-toe\main.cpp
 
 CMakeFiles/tic_tac_toe.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tic_tac_toe.dir/main.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\AinaArd\tictactoe\main.cpp > CMakeFiles\tic_tac_toe.dir\main.cpp.i
+	C:\MinGW64\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Lesya\Programs\c++\tic-tac-toe\main.cpp > CMakeFiles\tic_tac_toe.dir\main.cpp.i
 
 CMakeFiles/tic_tac_toe.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tic_tac_toe.dir/main.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\AinaArd\tictactoe\main.cpp -o CMakeFiles\tic_tac_toe.dir\main.cpp.s
-
-CMakeFiles/tic_tac_toe.dir/winning.cpp.obj: CMakeFiles/tic_tac_toe.dir/flags.make
-CMakeFiles/tic_tac_toe.dir/winning.cpp.obj: ../winning.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/tic_tac_toe.dir/winning.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\tic_tac_toe.dir\winning.cpp.obj -c C:\AinaArd\tictactoe\winning.cpp
-
-CMakeFiles/tic_tac_toe.dir/winning.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tic_tac_toe.dir/winning.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\AinaArd\tictactoe\winning.cpp > CMakeFiles\tic_tac_toe.dir\winning.cpp.i
-
-CMakeFiles/tic_tac_toe.dir/winning.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tic_tac_toe.dir/winning.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\AinaArd\tictactoe\winning.cpp -o CMakeFiles\tic_tac_toe.dir\winning.cpp.s
+	C:\MinGW64\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Lesya\Programs\c++\tic-tac-toe\main.cpp -o CMakeFiles\tic_tac_toe.dir\main.cpp.s
 
 # Object files for target tic_tac_toe
 tic_tac_toe_OBJECTS = \
-"CMakeFiles/tic_tac_toe.dir/main.cpp.obj" \
-"CMakeFiles/tic_tac_toe.dir/winning.cpp.obj"
+"CMakeFiles/tic_tac_toe.dir/main.cpp.obj"
 
 # External object files for target tic_tac_toe
 tic_tac_toe_EXTERNAL_OBJECTS =
 
 tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/main.cpp.obj
-tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/winning.cpp.obj
 tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/build.make
 tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/linklibs.rsp
 tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/objects1.rsp
 tic_tac_toe.exe: CMakeFiles/tic_tac_toe.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable tic_tac_toe.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable tic_tac_toe.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\tic_tac_toe.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -109,6 +94,6 @@ CMakeFiles/tic_tac_toe.dir/clean:
 .PHONY : CMakeFiles/tic_tac_toe.dir/clean
 
 CMakeFiles/tic_tac_toe.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\AinaArd\tictactoe C:\AinaArd\tictactoe C:\AinaArd\tictactoe\cmake-build-debug C:\AinaArd\tictactoe\cmake-build-debug C:\AinaArd\tictactoe\cmake-build-debug\CMakeFiles\tic_tac_toe.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Lesya\Programs\c++\tic-tac-toe C:\Users\Lesya\Programs\c++\tic-tac-toe C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug C:\Users\Lesya\Programs\c++\tic-tac-toe\cmake-build-debug\CMakeFiles\tic_tac_toe.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tic_tac_toe.dir/depend
 
