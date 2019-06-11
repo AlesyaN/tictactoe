@@ -31,7 +31,7 @@ private:
 
     bool check(int *step);
 
-    bool checkCell(int *step, int i, int j, int n);
+    bool checkCell(int *step, int i, int j, int point, int *first);
 
     bool win(char winner);
 
@@ -137,7 +137,7 @@ bool Game::check(int *step) {
     int count = 1;
     for (int i = -1; i < 2; i++) {
         for (int j = -1; j < 2; j++) {
-            if (checkCell(step, i, j, count)) {
+            if (checkCell(step, i, j, count, step)) {
                 return true;
             }
         }
@@ -145,8 +145,8 @@ bool Game::check(int *step) {
     return false;
 }
 
-bool Game::checkCell(int *step, int i, int j, int count) {
-    static int playerStep[2];
+bool Game::checkCell(int *step, int i, int j, int count, int *first) {
+    static int currentStep[2];
     if (count == 5) {
         return true;
     } else {
@@ -155,11 +155,14 @@ bool Game::checkCell(int *step, int i, int j, int count) {
                 return false;
             } else {
                 count++;
-                playerStep[0] = step[0] + i;
-                playerStep[1] = step[1] + j;
-                checkCell(playerStep, i, j, count);
+                currentStep[0] = step[0] + i;
+                currentStep[1] = step[1] + j;
+                cout << currentStep[0] << " " << currentStep[1] << " count = " << count << endl;
+                checkCell(currentStep, i, j, count, first);
             }
         } else {
+            cout << "false" << endl;
+//            TODO: pass count into checkCell
             return false;
         }
     }
