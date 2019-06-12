@@ -31,7 +31,7 @@ private:
 
     bool check(int *step);
 
-    bool checkCell(int *step, int i, int j, int point, int *first);
+    int countCells(int *step, int i, int j, int point);
 
     bool win(char winner);
 
@@ -134,37 +134,39 @@ char Game::checkDiagonals() {
 }
 
 bool Game::check(int *step) {
-    int count = 1;
-    for (int i = -1; i < 2; i++) {
-        for (int j = -1; j < 2; j++) {
-            if (checkCell(step, i, j, count, step)) {
+    int count = 0;
+    //diagonals and vertical
+    for (int j = -1; j < 2; j++) {
+        count = countCells(step, -1, j, count);
+        if (count >= 4) {
+            return true;
+        } else {
+            count = countCells(step, 1, -j, count);
+            if (count >= 4) {
                 return true;
             }
         }
+        count = 0;
     }
-    return false;
-}
-
-bool Game::checkCell(int *step, int i, int j, int count, int *first) {
-    static int currentStep[2];
-    if (count == 5) {
+    //gorizontal
+    count = countCells(step, 0, 1, count);
+    if (count >= 4) {
         return true;
     } else {
-        if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
-            if (i == 0 & j == 0) {
-                return false;
-            } else {
-                count++;
-                currentStep[0] = step[0] + i;
-                currentStep[1] = step[1] + j;
-                cout << currentStep[0] << " " << currentStep[1] << " count = " << count << endl;
-                checkCell(currentStep, i, j, count, first);
-            }
-        } else {
-            cout << "false" << endl;
-//            TODO: pass count into checkCell
-            return false;
-        }
+        count = countCells(step, 0, -1, count);
+        return (count >= 4);
+    }
+}
+
+int Game::countCells(int *step, int i, int j, int count) {
+    static int currentStep[2];
+    if (board[step[0]][step[1]] == board[step[0] + i][step[1] + j]) {
+        count++;
+        currentStep[0] = step[0] + i;
+        currentStep[1] = step[1] + j;
+        countCells(currentStep, i, j, count);
+    } else {
+        return count;
     }
 }
 
@@ -236,11 +238,12 @@ void Game::play() {
         int *steps = getStep(player);
 
         setStep(steps, player);
+        showBoard();
         if (check(steps)) {
             gameOver = true;
         }
 
-        showBoard();
+
         player = !player;
 
 
