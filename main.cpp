@@ -5,6 +5,7 @@
 #include <stack>
 #include <fstream>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
@@ -35,11 +36,9 @@ private:
 
     bool win(char winner);
 
-    pair<int, int> getStep();
-
     bool stepIsCorrect(pair<int, int> step);
 
-    void setStep(pair<int, int> step, bool player);
+    void nextStep(string cmd);
 
     void saveStep(pair<int, int> step);
 
@@ -48,6 +47,8 @@ private:
     void newGame();
 
     void save();
+
+    void printHistory();
 
 public:
 
@@ -94,6 +95,23 @@ void Game::save() {
     fout.close();
 }
 
+void Game::printHistory() {
+    ifstream fin(DB);
+    string line;
+    string word;
+    cout << "HISTORY:" << endl;
+    int i = 0;
+    while (getline(fin, line)) {
+        stringstream s(line);
+        cout << i << " ";
+        while (getline(s, word, ',')) {
+            cout << word << " ";
+        }
+        cout << endl;
+        i++;
+    }
+}
+
 
 void Game::showBoard() {
 
@@ -121,6 +139,12 @@ void Game::showBoard() {
         }
 
         cout << endl;
+    }
+
+    if (player) {
+        cout << player1 << " choose step: " << endl;
+    } else {
+        cout << player2 << " choose step: " << endl;
     }
 }
 
@@ -188,50 +212,6 @@ bool Game::stepIsCorrect(pair<int, int> step) {
     }
 }
 
-pair<int, int> Game::getStep() {
-    bool correctStep = false;
-    string cmd;
-    char step[2];
-    pair<int, int> p;
-    while (!correctStep) {
-        if (player) {
-            cout << player1 << " choose step: " << endl;
-        } else {
-            cout << player2 << " choose step: " << endl;
-        }
-        cin >> cmd;
-        if (cmd == "reset") {
-            resetStep();
-            continue;
-        }
-        if (cmd == "newgame") {
-            newGame();
-            continue;
-        }
-        if (cmd == "save") {
-            save();
-            continue;
-        }
-        step[0] = cmd[0];
-        cin >> step[1];
-
-        if ((int) step[0] >= (int) '0' && (int) step[0] <= (int) '9') {
-            p.first = step[0] - '0';
-        } else {
-            p.first = 10 + step[0] - 'A';
-        }
-
-        if ((int) step[1] >= (int) '0' && (int) step[1] <= (int) '9') {
-            p.second = step[1] - '0';
-        } else {
-            p.second = 10 + step[1] - 'A';
-        }
-
-        correctStep = stepIsCorrect(p);
-    }
-    return p;
-}
-
 void Game::saveStep(pair<int, int> step) {
     steps.push(step);
 }
@@ -248,14 +228,6 @@ void Game::resetStep() {
     }
 }
 
-void Game::setStep(pair<int, int> step, bool player) {
-    if (player) {
-        board[step.first][step.second] = 'X';
-    } else {
-        board[step.first][step.second] = 'O';
-    }
-    saveStep(step);
-}
 
 bool Game::win(char winner) {
     if (winner == 'X') {
@@ -268,42 +240,112 @@ bool Game::win(char winner) {
     return false;
 }
 
+void Game::nextStep(string cmd) {
+    bool correctStep = false;
+    pair<char, char> step;
+    pair<int, int> p;
+    step.first = cmd[0];
+    step.second = cmd[2];
+    while (!correctStep) {
+        if ((int) step.first >= (int) '0' && (int) step.first <= (int) '9') {
+            p.first = step.first - '0';
+        } else {
+            p.first = 10 + step.first - 'A';
+        }
+
+        if ((int) step.second >= (int) '0' && (int) step.second <= (int) '9') {
+            p.second = step.second - '0';
+        } else {
+            p.second = 10 + step.second - 'A';
+        }
+
+        correctStep = stepIsCorrect(p);
+    }
+
+    if (player) {
+        board[p.first][p.second] = 'X';
+    } else {
+        board[p.first][p.second] = 'O';
+    }
+    saveStep(p);
+
+}
+
+
+
 void Game::play() {
+    initPlayers();
     showBoard();
     bool gameOver = false;
     char winner = ' ';
 
     while (!gameOver) {
-        pair<int, int> steps = getStep();
-        setStep(steps, player);
-        showBoard();
+        string cmd;
+        getline(cin, cmd);
+        if (cmd == "options") {
+            cout << "new game --start new game" << endl;
+            cout << "reset --cancel the last step" << endl;
+            cout << "save --save the current game" << endl;
+            cout << "quit --quit the game" << endl;
+        } else if (cmd == "new game") {
+            newGame();
+        } else if (cmd == "reset") {
+            resetStep();
+            continue;
+        } else if (cmd == "save") {
+            save();
+            continue;
+        } else if (cmd == "quit") {
+            break;
+        } else {
+            nextStep(cmd);
 
-        winner = checkLines();
-        if (win(winner)) {
-            gameOver = true;
+            winner = checkLines();
+            if (win(winner)) {
+                gameOver = true;
+            }
+
+            winner = checkColumns();
+            if (win(winner)) {
+                gameOver = true;
+            }
+
+            winner = checkDiagonals();
+            if (win(winner)) {
+                gameOver = true;
+            }
+
+            player = !player;
+
+            showBoard();
         }
-
-        winner = checkColumns();
-        if (win(winner)) {
-            gameOver = true;
-        }
-
-        winner = checkDiagonals();
-        if (win(winner)) {
-            gameOver = true;
-        }
-
-        player = !player;
     }
 }
 
 void Game::start() {
     cout << "*******   WELCOME TO TIC TAC TOE!   *******" << endl;
-    initPlayers();
-    play();
+    cout << "Print 'options' to see all commands" << endl;
+
+    string cmd;
+    while (cmd != "exit") {
+        getline(cin, cmd);
+
+        if (cmd == "options") {
+            cout << "new game --start new game" << endl;
+            cout << "history --see the history of games" << endl;
+            cout << "exit --quit the program" << endl;
+        } else if (cmd == "history") {
+            printHistory();
+        } else if (cmd == "new game") {
+            play();
+        } else {
+            cout << "No such command. Try again." << endl;
+        }
+    }
 }
 
 
 int main() {
     Game.start();
+    return 0;
 }
