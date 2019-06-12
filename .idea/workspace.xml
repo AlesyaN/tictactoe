@@ -11,13 +11,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88751f73-3285-4b1a-9ff7-37a880542f9a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tic_tac_toe.dir/main.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tic_tac_toe.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tic_tac_toe.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/tic_tac_toe.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/tic_tac_toe.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="88751f73-3285-4b1a-9ff7-37a880542f9a" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -149,11 +143,18 @@
       <option name="project" value="LOCAL" />
       <updated>1560177695736</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="problem with count">
+      <created>1560242307165</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1560242307165</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44860000" />
+    <option name="totallyTimeSpent" value="45475000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -188,7 +189,8 @@
     <MESSAGE value="fixed check" />
     <MESSAGE value="started new algorithm, check if sell is the same" />
     <MESSAGE value="almost finished the algorithm" />
-    <option name="LAST_COMMIT_MESSAGE" value="almost finished the algorithm" />
+    <MESSAGE value="problem with count" />
+    <option name="LAST_COMMIT_MESSAGE" value="problem with count" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/winning.cpp" />
