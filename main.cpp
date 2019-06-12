@@ -3,12 +3,14 @@
 #include <iostream>
 #include <string.h>
 #include <stack>
+#include <fstream>
+#include <ctime>
 
 using namespace std;
 
 #define BOARD_SIZE 11
 #define MAX_NAME_LENGTH 20
-
+#define DB "history.csv"
 //main class of the game
 class Game {
 private:
@@ -17,6 +19,7 @@ private:
     string player2;
     stack<pair<int, int>> steps;
     bool player = true;
+
 
     void initPlayers();
 
@@ -44,10 +47,11 @@ private:
 
     void newGame();
 
+    void save();
+
 public:
 
     void start();
-
 
 } Game;
 
@@ -69,6 +73,25 @@ void Game::initPlayers() {
 void Game::newGame() {
     *this = Game();
     start();
+}
+
+void Game::save() {
+    ofstream fout(DB, ios::app);
+    time_t now = time(nullptr);
+
+    stack<pair<int, int>> current = steps;
+
+    fout << now << ","
+         << player1 << ","
+         << player2 << ","
+         << player << ",";
+
+    while (!current.empty()) {
+        fout << current.top().first << ":" << current.top().second << ",";
+        current.pop();
+    }
+    fout << endl;
+    fout.close();
 }
 
 
@@ -183,6 +206,10 @@ pair<int, int> Game::getStep() {
         }
         if (cmd == "newgame") {
             newGame();
+            continue;
+        }
+        if (cmd == "save") {
+            save();
             continue;
         }
         step[0] = cmd[0];
