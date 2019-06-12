@@ -42,9 +42,12 @@ private:
 
     void resetStep();
 
+    void newGame();
+
 public:
 
     void start();
+
 
 } Game;
 
@@ -54,12 +57,18 @@ void Game::initPlayers() {
     string name1;
     string name2;
     cout << "Print first player's name: " << endl;
+    cin.sync();
     getline(cin, name1);
 
     cout << "Print second player's name: " << endl;
     getline(cin, name2);
     player1 = std::move(name1);
     player2 = std::move(name2);
+}
+
+void Game::newGame() {
+    *this = Game();
+    start();
 }
 
 
@@ -170,6 +179,10 @@ pair<int, int> Game::getStep() {
         cin >> cmd;
         if (cmd == "reset") {
             resetStep();
+            continue;
+        }
+        if (cmd == "newgame") {
+            newGame();
             continue;
         }
         step[0] = cmd[0];
