@@ -30,6 +30,10 @@ private:
 
     char checkDiagonals();
 
+    bool check(pair<int, int> step);
+
+    int countCells(pair<int, int> step, int i, int j, int point);
+
     bool win(char winner);
 
     pair<int, int> getStep();
@@ -133,18 +137,43 @@ char Game::checkDiagonals() {
         }
     }
     return ' ';
+}
 
-//    for (int i = 0; i < 11; i++) {
-//        for (int j = 0; j < 11; j++) {
-//            if (board[i][j + 4] == board[i + 1][j + 3] &&
-//                board[i + 1][j + 3] == board[i + 2][j + 2] &&
-//                board[i + 2][j + 2] == board[i + 3][j + 1] &&
-//                board[i + 3][j + 1] == board[i + 4][j]) {
-//                cout << board[0][2] << endl;
-//                return board[0][2];
-//            }
-//        }
-//    }
+bool Game::check(pair<int, int> step) {
+    int count = 0;
+    //diagonals and vertical
+    for (int j = -1; j < 2; j++) {
+        count = countCells(step, -1, j, count);
+        if (count >= 4) {
+            return true;
+        } else {
+            count = countCells(step, 1, -j, count);
+            if (count >= 4) {
+                return true;
+            }
+        }
+        count = 0;
+    }
+    //horizontal
+    count = countCells(step, 0, 1, count);
+    if (count >= 4) {
+        return true;
+    } else {
+        count = countCells(step, 0, -1, count);
+        return (count >= 4);
+    }
+}
+
+int Game::countCells(pair<int, int> step, int i, int j, int count) {
+    static pair<int, int> currentStep;
+    if (board[step.first][step.second] == board[step.first + i][step.second + j]) {
+        count++;
+        currentStep.first = step.first + i;
+        currentStep.second = step.second + j;
+        countCells(currentStep, i, j, count);
+    } else {
+        return count;
+    }
 }
 
 bool Game::stepIsCorrect(pair<int, int> step) {
@@ -237,23 +266,30 @@ void Game::play() {
         pair<int, int> steps = getStep();
         setStep(steps, player);
         showBoard();
-
-        winner = checkLines();
-        if (win(winner)) {
+        if (check(steps)) {
             gameOver = true;
         }
 
-        winner = checkColumns();
-        if (win(winner)) {
-            gameOver = true;
-        }
-
-        winner = checkDiagonals();
-        if (win(winner)) {
-            gameOver = true;
-        }
 
         player = !player;
+
+
+//        winner = checkLines();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
+//
+//        winner = checkColumns();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
+//
+//        winner = checkDiagonals();
+//        if (win(winner)) {
+//            gameOver = true;
+//        }
+
+
     }
 }
 
@@ -262,7 +298,6 @@ void Game::start() {
     initPlayers();
     play();
 }
-
 
 int main() {
     Game.start();
