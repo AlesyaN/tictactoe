@@ -38,8 +38,6 @@ private:
 
     bool stepIsCorrect(pair<int, int> step);
 
-    void nextStep(string cmd);
-
     void saveStep(pair<int, int> step);
 
     void resetStep();
@@ -55,6 +53,8 @@ private:
     void replay(int index);
 
     void setStep(pair<int, int>);
+
+    void deleteHistory(int index);
 
 public:
 
@@ -87,6 +87,32 @@ void Game::setStep(pair<int, int> p) {
     } else {
         board[p.first][p.second] = 'O';
     }
+}
+
+void Game::deleteHistory(int index) {
+    ifstream is(DB);
+    ofstream ofs;
+    ofs.open("temp.csv", ofstream::out);
+    char c;
+    int line_no = 0;
+    while (is.get(c)) {
+        if (c == '\n')
+            line_no++;
+
+        if (line_no != index)
+            ofs << c;
+    }
+
+    ofs.close();
+
+    is.close();
+
+    remove(DB);
+
+    rename("temp.csv", DB);
+
+    ifstream s(DB);
+    s.close();
 }
 
 bool Game::initReplay(int index) {
@@ -124,14 +150,17 @@ bool Game::initReplay(int index) {
                 temp.push(step);
             }
 
-            player = !currentPlayer;
+            player = true;
             while (!temp.empty()) {
                 steps.push(temp.top());
                 setStep(temp.top());
                 temp.pop();
+                player = !player;
             }
 
             player = currentPlayer;
+
+            deleteHistory(index);
 
             return true;
         }
@@ -185,6 +214,7 @@ void Game::printHistory() {
     }
 
     cout << "\n Print 'replay *number*' to replay the game" << endl;
+    cout << "\n Print 'delete *number*' to delete the game" << endl;
 }
 
 
@@ -315,33 +345,6 @@ bool Game::win(char winner) {
     return false;
 }
 
-void Game::nextStep(string cmd) {
-    bool correctStep = false;
-    pair<char, char> step;
-    pair<int, int> p;
-    step.first = cmd[0];
-    step.second = cmd[2];
-    while (!correctStep) {
-        if ((int) step.first >= (int) '0' && (int) step.first <= (int) '9') {
-            p.first = step.first - '0';
-        } else {
-            p.first = 10 + step.first - 'A';
-        }
-
-        if ((int) step.second >= (int) '0' && (int) step.second <= (int) '9') {
-            p.second = step.second - '0';
-        } else {
-            p.second = 10 + step.second - 'A';
-        }
-
-        correctStep = stepIsCorrect(p);
-    }
-
-    setStep(p);
-    saveStep(p);
-}
-
-
 
 void Game::play() {
     showBoard();
@@ -350,6 +353,7 @@ void Game::play() {
 
     while (!gameOver) {
         string cmd;
+        cin.sync();
         getline(cin, cmd);
         if (cmd == "options") {
             cout << "new game --start new game" << endl;
@@ -367,7 +371,29 @@ void Game::play() {
         } else if (cmd == "quit") {
             break;
         } else {
-            nextStep(cmd);
+
+            pair<char, char> step;
+            pair<int, int> p;
+            step.first = cmd[0];
+            step.second = cmd[2];
+
+            if ((int) step.first >= (int) '0' && (int) step.first <= (int) '9') {
+                p.first = step.first - '0';
+            } else {
+                p.first = 10 + step.first - 'A';
+            }
+
+            if ((int) step.second >= (int) '0' && (int) step.second <= (int) '9') {
+                p.second = step.second - '0';
+            } else {
+                p.second = 10 + step.second - 'A';
+            }
+
+            if (stepIsCorrect(p)) {
+                saveStep(p);
+                setStep(p);
+                player = !player;
+            }
 
             winner = checkLines();
             if (win(winner)) {
@@ -384,7 +410,7 @@ void Game::play() {
                 gameOver = true;
             }
 
-            player = !player;
+
 
             showBoard();
         }
@@ -410,14 +436,19 @@ void Game::start() {
             play();
         } else {
             stringstream s(cmd);
-            string replay;
-            getline(s, replay,' ');
-            if (replay == "replay") {
-                string num;
+            string subCmd;
+            string num;
+            getline(s, subCmd,' ');
+            if (subCmd == "replay") {
                 getline(s, num, ' ');
-                Game::replay(stoi(num));
+                replay(stoi(num));
+            } else if (subCmd == "delete") {
+                getline(s, num, ' ');
+                deleteHistory(stoi(num));
+                printHistory();
+            } else {
+                cout << "No such command. Try again." << endl;
             }
-            cout << "No such command. Try again." << endl;
         }
     }
 }
