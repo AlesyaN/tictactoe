@@ -93,26 +93,19 @@ void Game::deleteHistory(int index) {
     ifstream is(DB);
     ofstream ofs;
     ofs.open("temp.csv", ofstream::out);
-    char c;
     int line_no = 0;
-    while (is.get(c)) {
-        if (c == '\n')
-            line_no++;
-
+    string line;
+    while (getline(is, line, '\n')) {
         if (line_no != index)
-            ofs << c;
+            ofs << line << endl;
+        line_no++;
     }
 
     ofs.close();
-
     is.close();
 
     remove(DB);
-
     rename("temp.csv", DB);
-
-    ifstream s(DB);
-    s.close();
 }
 
 bool Game::initReplay(int index) {
@@ -160,6 +153,7 @@ bool Game::initReplay(int index) {
 
             player = currentPlayer;
 
+            fin.close();
             deleteHistory(index);
 
             return true;
@@ -294,18 +288,6 @@ char Game::checkDiagonals() {
         }
     }
     return ' ';
-
-//    for (int i = 0; i < 11; i++) {
-//        for (int j = 0; j < 11; j++) {
-//            if (board[i][j + 4] == board[i + 1][j + 3] &&
-//                board[i + 1][j + 3] == board[i + 2][j + 2] &&
-//                board[i + 2][j + 2] == board[i + 3][j + 1] &&
-//                board[i + 3][j + 1] == board[i + 4][j]) {
-//                cout << board[0][2] << endl;
-//                return board[0][2];
-//            }
-//        }
-//    }
 }
 
 bool Game::stepIsCorrect(pair<int, int> step) {
