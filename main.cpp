@@ -50,6 +50,12 @@ private:
 
     void printHistory();
 
+    bool initReplay(int index);
+
+    void replay(int index);
+
+    void setStep(pair<int, int>);
+
 public:
 
     void start();
@@ -74,6 +80,73 @@ void Game::initPlayers() {
 void Game::newGame() {
     *this = Game();
     start();
+}
+void Game::setStep(pair<int, int> p) {
+    if (player) {
+        board[p.first][p.second] = 'X';
+    } else {
+        board[p.first][p.second] = 'O';
+    }
+}
+
+bool Game::initReplay(int index) {
+    ifstream fin(DB);
+    string line;
+    string word;
+    int i = 0;
+    while (getline(fin, line)) {
+        if (i == index) {
+            stack<pair<int, int>> temp;
+
+            stringstream s(line);
+            getline(s, word, ',');
+
+            getline(s, word, ',');
+            player1 = word;
+
+            getline(s, word, ',');
+            player2 = word;
+
+            getline(s, word, ',');
+            bool currentPlayer = word == "1";
+
+            while (getline(s, word, ',')) {
+                pair<int, int> step;
+                stringstream str(word);
+
+                string cell;
+                getline(str, cell, ':');
+                step.first = stoi(cell);
+
+                getline(str, cell, ':');
+                step.second = stoi(cell);
+
+                temp.push(step);
+            }
+
+            player = !currentPlayer;
+            while (!temp.empty()) {
+                steps.push(temp.top());
+                setStep(temp.top());
+                temp.pop();
+            }
+
+            player = currentPlayer;
+
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
+void Game::replay(int index) {
+    if (initReplay(index)) {
+        play();
+    } else {
+        cout << "No game with " << index << " index";
+        return;
+    }
 }
 
 void Game::save() {
@@ -110,6 +183,8 @@ void Game::printHistory() {
         cout << endl;
         i++;
     }
+
+    cout << "\n Print 'replay *number*' to replay the game" << endl;
 }
 
 
@@ -262,19 +337,13 @@ void Game::nextStep(string cmd) {
         correctStep = stepIsCorrect(p);
     }
 
-    if (player) {
-        board[p.first][p.second] = 'X';
-    } else {
-        board[p.first][p.second] = 'O';
-    }
+    setStep(p);
     saveStep(p);
-
 }
 
 
 
 void Game::play() {
-    initPlayers();
     showBoard();
     bool gameOver = false;
     char winner = ' ';
@@ -337,8 +406,17 @@ void Game::start() {
         } else if (cmd == "history") {
             printHistory();
         } else if (cmd == "new game") {
+            initPlayers();
             play();
         } else {
+            stringstream s(cmd);
+            string replay;
+            getline(s, replay,' ');
+            if (replay == "replay") {
+                string num;
+                getline(s, num, ' ');
+                Game::replay(stoi(num));
+            }
             cout << "No such command. Try again." << endl;
         }
     }
