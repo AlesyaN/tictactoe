@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Lesya/Programs/c++/tic-tac-toe/main.cpp
+utility
+-
+utility
+-
+iostream
+-
+string.h
+-
+stack
+-
+fstream
+-
+ctime
+-
+sstream
+-
+
