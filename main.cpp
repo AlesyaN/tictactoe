@@ -200,6 +200,17 @@ void Game::printHistory() {
     while (getline(fin, line)) {
         stringstream s(line);
         cout << i << " ";
+
+        getline(s, word, ',');
+
+        time_t time = (time_t)stoi(word);
+        tm *ltm = localtime(&time);
+        cout << ltm->tm_hour << ":"
+             << ltm->tm_min << ":"
+             << ltm->tm_sec << " "
+             << ltm->tm_mday << "."
+             << 1+ ltm->tm_mon << "."
+             << 1900 + ltm->tm_year << " ";
         while (getline(s, word, ',')) {
             cout << word << " ";
         }
