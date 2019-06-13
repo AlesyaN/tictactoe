@@ -148,7 +148,7 @@ bool Game::check(int *step) {
         }
         count = 0;
     }
-    //gorizontal
+    //horizontal
     count = countCells(step, 0, 1, count);
     if (count >= 4) {
         return true;
