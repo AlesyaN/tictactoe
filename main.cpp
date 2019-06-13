@@ -273,23 +273,6 @@ void Game::play() {
 
         player = !player;
 
-
-//        winner = checkLines();
-//        if (win(winner)) {
-//            gameOver = true;
-//        }
-//
-//        winner = checkColumns();
-//        if (win(winner)) {
-//            gameOver = true;
-//        }
-//
-//        winner = checkDiagonals();
-//        if (win(winner)) {
-//            gameOver = true;
-//        }
-
-
     }
 }
 
