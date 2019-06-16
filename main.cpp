@@ -12,6 +12,7 @@ using namespace std;
 #define BOARD_SIZE 11
 #define MAX_NAME_LENGTH 20
 #define DB "history.csv"
+
 //main class of the game
 class Game {
 private:
@@ -20,7 +21,7 @@ private:
     string player2;
     stack<pair<int, int>> steps;
     bool player = true;
-
+    int countOfFree = BOARD_SIZE * BOARD_SIZE;
 
     void initPlayers();
 
@@ -30,8 +31,7 @@ private:
 
     bool check(pair<int, int> step);
 
-    int countCells(pair<int, int> step, int i, int j, int point);
-
+    int countCells(pair<int, int> step, int i, int j, int count);
 
     bool stepIsCorrect(pair<int, int> step);
 
@@ -57,6 +57,9 @@ public:
 
     void start();
 
+    bool checkIfRaw();
+
+    bool boardIsFull();
 } Game;
 
 
@@ -78,11 +81,14 @@ void Game::newGame() {
     *this = Game();
     start();
 }
+
 void Game::setStep(pair<int, int> p) {
     if (player) {
         board[p.first][p.second] = 'X';
+        countOfFree--;
     } else {
         board[p.first][p.second] = 'O';
+        countOfFree--;
     }
 }
 
@@ -200,13 +206,13 @@ void Game::printHistory() {
 
         getline(s, word, ',');
 
-        time_t time = (time_t)stoi(word);
+        time_t time = (time_t) stoi(word);
         tm *ltm = localtime(&time);
         cout << ltm->tm_hour << ":"
              << ltm->tm_min << ":"
              << ltm->tm_sec << " "
              << ltm->tm_mday << "."
-             << 1+ ltm->tm_mon << "."
+             << 1 + ltm->tm_mon << "."
              << 1900 + ltm->tm_year << " ";
         while (getline(s, word, ',')) {
             cout << word << " ";
@@ -373,6 +379,8 @@ void Game::play() {
                 }
                 cout << " won!\nPrint 'new game' to start a new game" << endl;
                 return;
+            } else if (checkIfRaw()) {
+                cout << "It is raw!" << endl;
             }
             showBoard();
         }
@@ -400,7 +408,7 @@ void Game::start() {
             stringstream s(cmd);
             string subCmd;
             string num;
-            getline(s, subCmd,' ');
+            getline(s, subCmd, ' ');
             if (subCmd == "replay") {
                 getline(s, num, ' ');
                 replay(stoi(num));
@@ -413,6 +421,14 @@ void Game::start() {
             }
         }
     }
+}
+
+bool Game::boardIsFull() {
+    return countOfFree == 0;
+}
+
+bool Game::checkIfRaw() {
+    return boardIsFull();
 }
 
 int main() {
