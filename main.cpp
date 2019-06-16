@@ -318,6 +318,7 @@ void Game::resetStep() {
         player = !player;
         showBoard();
         steps.pop();
+        countOfFree++;
     } else {
         cout << "No steps to reset" << endl;
     }
