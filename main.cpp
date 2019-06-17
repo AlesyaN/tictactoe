@@ -124,9 +124,6 @@ bool Game::initReplay(int index) {
             getline(s, word, ',');
 
             getline(s, word, ',');
-            countOfFree = stoi(word);
-
-            getline(s, word, ',');
             player1 = word;
 
             getline(s, word, ',');
@@ -157,6 +154,7 @@ bool Game::initReplay(int index) {
                 player = !player;
             }
 
+            countOfFree = static_cast<int>(BOARD_SIZE * BOARD_SIZE - steps.size() / 2);
             player = currentPlayer;
 
             fin.close();
@@ -184,8 +182,6 @@ void Game::save() {
 
     stack<pair<int, int>> current = steps;
 
-    fout << countOfFree << endl;
-
     fout << now << ","
          << player1 << ","
          << player2 << ","
@@ -195,7 +191,7 @@ void Game::save() {
         fout << current.top().first << ":" << current.top().second << ",";
         current.pop();
     }
-
+    cout << countOfFree << endl;
     fout << endl;
     fout.close();
 }
