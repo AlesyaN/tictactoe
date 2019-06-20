@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string.h>
 
+#include <algorithm>
+
 using namespace std;
 
 #define BOARD_SIZE 11
@@ -21,6 +23,9 @@ private:
 
     void play();
 
+    void initPlayer();
+    void playWithAI();
+
     void showBoard();
 
     char checkLines();
@@ -36,6 +41,9 @@ private:
     bool stepIsCorrect(int *step);
 
     void setStep(int *step, bool player);
+
+public:
+    const string &getPlayer1() const;
 
 public:
     void start();
@@ -55,6 +63,8 @@ void Game::initPlayers() {
     player1 = std::move(name1);
     player2 = std::move(name2);
 }
+
+
 
 
 void Game::showBoard() {
@@ -237,7 +247,8 @@ void Game::start() {
         cout << "Choose game mode: \n 0 - play with computer \n 1 - play with friend" << endl;
         cin >> mode;
         if (mode == "0") {
-            cout << "with comp";
+            initPlayer();
+
             gameStarted = true;
         } else if (mode == "1") {
             initPlayers();
@@ -248,6 +259,22 @@ void Game::start() {
 
 }
 
+void Game::initPlayer() {
+    cout << "Enter player's name: "<< endl;
+    cin >> player1;
+}
+
+void Game::playWithAI() {
+    showBoard();
+}
+
+
+
+void emptyIndexes(char board [BOARD_SIZE][BOARD_SIZE]){
+    for (int i=0; i<BOARD_SIZE; i++ ){
+        for
+    }
+}
 
 int main() {
     Game.start();
