@@ -6,6 +6,10 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
+#include <stdio.h>
+#include <Windows.h>
+#include <cstdlib>
+#include <conio.h>
 
 using namespace std;
 
@@ -308,6 +312,7 @@ bool Game::stepIsCorrect(pair<int, int> step) {
     if (step.first < BOARD_SIZE && step.second < BOARD_SIZE && (int) board[step.first][step.second] == 0) {
         return true;
     } else {
+        system("color C0");
         cout << "Wrong step!" << endl;
         return false;
     }
@@ -378,6 +383,7 @@ void Game::play() {
                 player = !player;
             }
             if (check(p)) {
+                system("color E0");
                 cout << "Game over! ";
                 if (!player) {
                     cout << player1;
@@ -430,6 +436,7 @@ void Game::start() {
     }
 }
 
+
 bool Game::boardIsFull() {
     return countOfFree == 0;
 }
@@ -438,7 +445,9 @@ bool Game::checkIfRaw() {
     return boardIsFull();
 }
 
+
 int main() {
+    system("color B0");
     Game.start();
     return 0;
 }
