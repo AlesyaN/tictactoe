@@ -10,15 +10,12 @@ pair<int, int> AIPlayer::getAIMove() {
     int alpha = -1000;
     int beta = 1000;
 
-    for (int i = start(gameBoard.lastMove.first); i <= end(gameBoard.lastMove.first); i++) {
-        for (int j = start(gameBoard.lastMove.second); j <= end(gameBoard.lastMove.second); j++) {
+    for (int i = start(gameBoard.steps.top().first); i <= end(gameBoard.steps.top().first); i++) {
+        for (int j = start(gameBoard.steps.top().second); j <= end(gameBoard.steps.top().second); j++) {
             if (board[i][j] == (char) 0) {
                 board[i][j] = 'O';
-
                 int moveVal = minimax(0, false, alpha, beta);
-
                 board[i][j] = (char) 0;
-
                 if (moveVal > bestVal) {
                     bestMove.first = i;
                     bestMove.second = j;
@@ -57,14 +54,14 @@ int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
         return score + depth;
     }
 
-    if (!isMovesLeft()) {
+    if (!isFreeCellsLeft()) {
         return 0;
     }
 
     if (isMax) {
         int bestVal = -999;
-        for (int i = start(gameBoard.lastMove.first); i <= end(gameBoard.lastMove.first); i++) {
-            for (int j = start(gameBoard.lastMove.second); j <= end(gameBoard.lastMove.second); j++) {
+        for (int i = start(gameBoard.steps.top().first); i <= end(gameBoard.steps.top().first); i++) {
+            for (int j = start(gameBoard.steps.top().second); j <= end(gameBoard.steps.top().second); j++) {
                 if (board[i][j] == (char) 0) {
                     board[i][j] = 'O';
                     int val = minimax(depth + 1, !isMax, alpha, beta);
@@ -81,8 +78,8 @@ int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
         return bestVal;
     } else {
         int bestVal = 999;
-        for (int i = start(gameBoard.lastMove.first); i <= end(gameBoard.lastMove.first); i++) {
-            for (int j = start(gameBoard.lastMove.second); j <= end(gameBoard.lastMove.second); j++) {
+        for (int i = start(gameBoard.steps.top().first); i <= end(gameBoard.steps.top().first); i++) {
+            for (int j = start(gameBoard.steps.top().second); j <= end(gameBoard.steps.top().second); j++) {
                 if (board[i][j] == (char) 0) {
                     board[i][j] = 'X';
                     int val = minimax(depth + 1, !isMax, alpha, beta);
@@ -123,7 +120,7 @@ int AIPlayer::evaluate() {
     return 0;
 }
 
-bool AIPlayer::isMovesLeft() {
+bool AIPlayer::isFreeCellsLeft() {
     return gameBoard.steps.size() < BOARD_SIZE * BOARD_SIZE;
 }
 

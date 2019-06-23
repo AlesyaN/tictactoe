@@ -14,11 +14,11 @@ using namespace std;
 
 #define BOARD_SIZE 11
 
+//entity of game board, keeps 2D array and stack of all steps, including last user step
 class Board {
+
 public:
     char boardArray[BOARD_SIZE][BOARD_SIZE];
-    pair<int, int> lastMove;
     stack<pair<int, int>> steps;
 };
-
 #endif
