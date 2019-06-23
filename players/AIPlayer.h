@@ -1,6 +1,3 @@
-//
-// Created by Asus on 22.06.2019.
-//
 #include <utility>
 #include <iostream>
 #include <string.h>
@@ -13,25 +10,23 @@
 using namespace std;
 
 #include "../util/Board.h"
-
 #ifndef FINAL_TICTACTOE_AIPLAYER_H
 #define FINAL_TICTACTOE_AIPLAYER_H
 
 class AIPlayer {
 
 public:
-    AIPlayer();
 
+    //instance of game field
     Board gameBoard;
 
+    pair<int, int> getAIMove();
+
+    //constructors
+    AIPlayer();
     AIPlayer(Board &gameBoard);
 
-    void initPlayer();
-
-    void playWithAI();
-
-    pair<int, int> findBestMove();
-
+private:
     int start(int i);
 
     int end(int i);
@@ -41,8 +36,6 @@ public:
     int evaluate();
 
     bool isMovesLeft();
-
-
 };
 
 #endif

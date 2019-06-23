@@ -1,18 +1,7 @@
 #include "AIPlayer.h"
 #include "../util/CheckAlgorithm.h"
 
-extern CheckAlgorithm checkAlgorithm;
-
-
-void AIPlayer::initPlayer() {
-
-}
-
-void AIPlayer::playWithAI() {
-
-}
-
-pair<int, int> AIPlayer::findBestMove() {
+pair<int, int> AIPlayer::getAIMove() {
     auto board = gameBoard.boardArray;
     int bestVal = -1000;
     pair<int, int> bestMove;

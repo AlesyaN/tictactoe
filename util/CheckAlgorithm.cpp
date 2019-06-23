@@ -8,12 +8,10 @@ bool CheckAlgorithm::check(Board board) {
     for (int j = -1; j < 2; j++) {
         count = countCells(board, step, -1, j, count);
         if (count >= 4) {
-            cout << "up" << endl;
             return true;
         } else {
             count = countCells(board, step, 1, -j, count);
             if (count >= 4) {
-                cout << "down" << endl;
                 return true;
             }
         }
@@ -22,7 +20,6 @@ bool CheckAlgorithm::check(Board board) {
     //horizontal
     count = countCells(board, step, 0, 1, count);
     if (count >= 4) {
-        cout << "right " << count << endl;
         return true;
     } else {
         count = countCells(board, step, 0, -1, count);

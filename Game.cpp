@@ -35,6 +35,7 @@ private:
     void play();
 
     void showBoard();
+    void whoIsNext();
 
     bool stepIsCorrect(pair<int, int> step);
 
@@ -271,7 +272,8 @@ void Game::showBoard() {
 
         cout << endl;
     }
-
+}
+void Game::whoIsNext(){
     if (player) {
         cout << player1 << " choose step: " << endl;
     } else {
@@ -295,6 +297,7 @@ void Game::resetStep() {
         b.boardArray[p.first][p.second] = 0;
         player = !player;
         showBoard();
+        whoIsNext();
         b.steps.pop();
     } else {
         cout << "No steps to reset" << endl;
@@ -304,6 +307,7 @@ void Game::resetStep() {
 
 void Game::play() {
     showBoard();
+    whoIsNext();
 
     while (true) {
         string cmd;
@@ -325,30 +329,10 @@ void Game::play() {
         } else if (cmd == "quit") {
             break;
         } else {
-
-            pair<char, char> step;
-            pair<int, int> p;
-            step.first = cmd[0];
-            step.second = cmd[2];
-
-            if ((int) step.first >= (int) '0' && (int) step.first <= (int) '9') {
-                p.first = step.first - '0';
-            } else {
-                p.first = 10 + step.first - 'A';
-            }
-
-            if ((int) step.second >= (int) '0' && (int) step.second <= (int) '9') {
-                p.second = step.second - '0';
-            } else {
-                p.second = 10 + step.second - 'A';
-            }
-
-            if (stepIsCorrect(p)) {
-                setStep(p);
-                player = !player;
-            }
+            pair<int, int> p = getPlayerMove(cmd);
             if (checkAlgorithm.check(b)) {
                 system("color E0");
+                showBoard();
                 cout << "Game over! ";
                 if (!player) {
                     cout << player1;
@@ -361,12 +345,14 @@ void Game::play() {
                 cout << "It is raw!" << endl;
             }
             showBoard();
+            whoIsNext();
         }
     }
 }
 
 void Game::playWithAI() {
     showBoard();
+    whoIsNext();
 
     while (true) {
         string cmd;
@@ -394,6 +380,7 @@ void Game::playWithAI() {
                 b.lastMove = p;
                 if (checkAlgorithm.check(b)) {
                     system("color E0");
+                    showBoard();
                     cout << "Game over! ";
                     if (!player) {
                         cout << player1;
@@ -406,13 +393,15 @@ void Game::playWithAI() {
                     cout << "It is raw!" << endl;
                 }
                 showBoard();
+                whoIsNext();
                 aiPlayer.gameBoard = b;
-                pair<int, int> aiStep = aiPlayer.findBestMove();
+                pair<int, int> aiStep = aiPlayer.getAIMove();
                 b.boardArray[aiStep.first][aiStep.second] = 'O';
                 b.lastMove = aiStep;
                 setStep(aiStep);
                 player = !player;
                 showBoard();
+                whoIsNext();
             }
 
 
