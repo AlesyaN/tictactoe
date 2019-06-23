@@ -35,7 +35,7 @@ private:
 
     int evaluate();
 
-    bool isMovesLeft();
+    bool isFreeCellsLeft();
 };
 
 #endif

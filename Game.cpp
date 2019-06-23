@@ -377,7 +377,6 @@ void Game::playWithAI() {
         } else {
             pair<int, int> p = getPlayerMove(cmd);
             if (p.first != -1 && p.second != -1) {
-                b.lastMove = p;
                 if (checkAlgorithm.check(b)) {
                     system("color E0");
                     showBoard();
@@ -397,7 +396,6 @@ void Game::playWithAI() {
                 aiPlayer.gameBoard = b;
                 pair<int, int> aiStep = aiPlayer.getAIMove();
                 b.boardArray[aiStep.first][aiStep.second] = 'O';
-                b.lastMove = aiStep;
                 setStep(aiStep);
                 player = !player;
                 showBoard();
@@ -430,7 +428,6 @@ pair<int, int> Game::getPlayerMove(string input) {
     if (stepIsCorrect(p)) {
         setStep(p);
         player = !player;
-        b.lastMove = p;
         return p;
     } else {
         p.first = -1;
