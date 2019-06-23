@@ -6,6 +6,10 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
+#include <stdio.h>
+#include <Windows.h>
+#include <cstdlib>
+#include <conio.h>
 
 using namespace std;
 
@@ -53,13 +57,12 @@ private:
 
     void deleteHistory(int index);
 
-public:
-
-    void start();
-
     bool checkIfRaw();
 
     bool boardIsFull();
+
+public:
+    void start();
 } Game;
 
 
@@ -83,8 +86,11 @@ void Game::newGame() {
 }
 
 void Game::setStep(pair<int, int> p) {
+//    set color of the board
+    system("color B0");
     if (player) {
         board[p.first][p.second] = 'X';
+//        decrease number of free cells when player makes step
         countOfFree--;
     } else {
         board[p.first][p.second] = 'O';
@@ -265,7 +271,7 @@ void Game::showBoard() {
 
 bool Game::check(pair<int, int> step) {
     int count = 0;
-    //diagonals and vertical
+    //diagonals and vertical are checked
     for (int j = -1; j < 2; j++) {
         count = countCells(step, -1, j, count);
         if (count >= 4) {
@@ -278,7 +284,7 @@ bool Game::check(pair<int, int> step) {
         }
         count = 0;
     }
-    //horizontal
+    //horizontal check
     count = countCells(step, 0, 1, count);
     if (count >= 4) {
         return true;
@@ -288,6 +294,7 @@ bool Game::check(pair<int, int> step) {
     }
 }
 
+//    count number of same chars in line
 int Game::countCells(pair<int, int> step, int i, int j, int count) {
     static pair<int, int> currentStep;
     if (board[step.first][step.second] == board[step.first + i][step.second + j]) {
@@ -304,6 +311,8 @@ bool Game::stepIsCorrect(pair<int, int> step) {
     if (step.first < BOARD_SIZE && step.second < BOARD_SIZE && (int) board[step.first][step.second] == 0) {
         return true;
     } else {
+//        change color if player made mistake
+        system("color C0");
         cout << "Wrong step!" << endl;
         return false;
     }
@@ -320,6 +329,7 @@ void Game::resetStep() {
         player = !player;
         showBoard();
         steps.pop();
+//        increase number of free cells if step is reset
         countOfFree++;
     } else {
         cout << "No steps to reset" << endl;
@@ -374,6 +384,8 @@ void Game::play() {
                 player = !player;
             }
             if (check(p)) {
+//                change color of the console if game is over
+                system("color E0");
                 cout << "Game over! ";
                 if (!player) {
                     cout << player1;
@@ -426,15 +438,20 @@ void Game::start() {
     }
 }
 
+//  check if there are empty cells
 bool Game::boardIsFull() {
     return countOfFree == 0;
 }
 
+//  check if it is raw
 bool Game::checkIfRaw() {
     return boardIsFull();
 }
 
+
 int main() {
+//    set main color of the game
+    system("color B0");
     Game.start();
     return 0;
 }
