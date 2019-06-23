@@ -11,21 +11,24 @@
 #include <cstdlib>
 #include <conio.h>
 
+#include <algorithm>
+#include "players/AIPlayer.h"
+#include "util/CheckAlgorithm.h"
+
 using namespace std;
 
-#define BOARD_SIZE 11
-#define MAX_NAME_LENGTH 20
 #define DB "history.csv"
 
-//main class of the game
 class Game {
 private:
-    char board[BOARD_SIZE][BOARD_SIZE]{};
+    Board b;
     string player1;
     string player2;
-    stack<pair<int, int>> steps;
+    AIPlayer aiPlayer;
+    CheckAlgorithm checkAlgorithm;
+
+
     bool player = true;
-    int countOfFree = BOARD_SIZE * BOARD_SIZE;
 
     void initPlayers();
 
@@ -33,13 +36,7 @@ private:
 
     void showBoard();
 
-    bool check(pair<int, int> step);
-
-    int countCells(pair<int, int> step, int i, int j, int count);
-
     bool stepIsCorrect(pair<int, int> step);
-
-    void saveStep(pair<int, int> step);
 
     void resetStep();
 
@@ -57,12 +54,16 @@ private:
 
     void deleteHistory(int index);
 
-    bool checkIfRaw();
+    void initPlayer();
 
-    bool boardIsFull();
+    void playWithAI();
+
+    pair<int, int> getPlayerMove(string input);
 
 public:
+
     void start();
+
 } Game;
 
 
@@ -70,14 +71,28 @@ public:
 void Game::initPlayers() {
     string name1;
     string name2;
-    cout << "Print first player's name: " << endl;
-    cin.sync();
-    getline(cin, name1);
+    do {
+        cout << "Print first player's name: " << endl;
+        cin.sync();
+        getline(cin, name1);
+    } while (name1.empty());
 
-    cout << "Print second player's name: " << endl;
-    getline(cin, name2);
+    do {
+        cout << "Print second player's name: " << endl;
+        getline(cin, name2);
+    } while (name1.empty());
+    b = Board();
     player1 = std::move(name1);
     player2 = std::move(name2);
+}
+
+void Game::initPlayer() {
+    cout << "Print your name: " << endl;
+    cin.sync();
+    getline(cin, player1);
+    b = Board();
+    aiPlayer = AIPlayer(b);
+    player2 = "computer";
 }
 
 void Game::newGame() {
@@ -86,16 +101,13 @@ void Game::newGame() {
 }
 
 void Game::setStep(pair<int, int> p) {
-//    set color of the board
     system("color B0");
     if (player) {
-        board[p.first][p.second] = 'X';
-//        decrease number of free cells when player makes step
-        countOfFree--;
+        b.boardArray[p.first][p.second] = 'X';
     } else {
-        board[p.first][p.second] = 'O';
-        countOfFree--;
+        b.boardArray[p.first][p.second] = 'O';
     }
+    b.steps.push(p);
 }
 
 void Game::deleteHistory(int index) {
@@ -135,8 +147,6 @@ bool Game::initReplay(int index) {
             getline(s, word, ',');
             player2 = word;
 
-            getline(s, word, ',');
-            bool currentPlayer = word == "1";
 
             while (getline(s, word, ',')) {
                 pair<int, int> step;
@@ -153,15 +163,15 @@ bool Game::initReplay(int index) {
             }
 
             player = true;
+
             while (!temp.empty()) {
-                steps.push(temp.top());
+                b.steps.push(temp.top());
                 setStep(temp.top());
                 temp.pop();
                 player = !player;
             }
 
-            countOfFree = static_cast<int>(BOARD_SIZE * BOARD_SIZE - steps.size() / 2);
-            player = currentPlayer;
+//            player = b.steps.size() % 2 == 0;
 
             fin.close();
             deleteHistory(index);
@@ -175,7 +185,11 @@ bool Game::initReplay(int index) {
 
 void Game::replay(int index) {
     if (initReplay(index)) {
-        play();
+        if (player2 != "computer") {
+            play();
+        } else {
+            playWithAI();
+        }
     } else {
         cout << "No game with " << index << " index";
         return;
@@ -186,18 +200,16 @@ void Game::save() {
     ofstream fout(DB, ios::app);
     time_t now = time(nullptr);
 
-    stack<pair<int, int>> current = steps;
+    stack<pair<int, int>> current = b.steps;
 
     fout << now << ","
          << player1 << ","
-         << player2 << ","
-         << player << ",";
+         << player2 << ",";
 
     while (!current.empty()) {
         fout << current.top().first << ":" << current.top().second << ",";
         current.pop();
     }
-    cout << countOfFree << endl;
     fout << endl;
     fout.close();
 }
@@ -236,7 +248,6 @@ void Game::printHistory() {
 
 void Game::showBoard() {
 
-    //first line with numbers
     cout << "  ";
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (9 < i) {
@@ -247,7 +258,6 @@ void Game::showBoard() {
     }
     cout << endl;
 
-    //the board
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (9 < i) {
             cout << static_cast<char>('A' + i - 10) << "|";
@@ -256,7 +266,7 @@ void Game::showBoard() {
         }
 
         for (int j = 0; j < BOARD_SIZE; j++) {
-            cout << board[i][j] << '|';
+            cout << b.boardArray[i][j] << '|';
         }
 
         cout << endl;
@@ -269,68 +279,23 @@ void Game::showBoard() {
     }
 }
 
-bool Game::check(pair<int, int> step) {
-    int count = 0;
-    //diagonals and vertical are checked
-    for (int j = -1; j < 2; j++) {
-        count = countCells(step, -1, j, count);
-        if (count >= 4) {
-            return true;
-        } else {
-            count = countCells(step, 1, -j, count);
-            if (count >= 4) {
-                return true;
-            }
-        }
-        count = 0;
-    }
-    //horizontal check
-    count = countCells(step, 0, 1, count);
-    if (count >= 4) {
-        return true;
-    } else {
-        count = countCells(step, 0, -1, count);
-        return (count >= 4);
-    }
-}
-
-//    count number of same chars in line
-int Game::countCells(pair<int, int> step, int i, int j, int count) {
-    static pair<int, int> currentStep;
-    if (board[step.first][step.second] == board[step.first + i][step.second + j]) {
-        count++;
-        currentStep.first = step.first + i;
-        currentStep.second = step.second + j;
-        countCells(currentStep, i, j, count);
-    } else {
-        return count;
-    }
-}
-
 bool Game::stepIsCorrect(pair<int, int> step) {
-    if (step.first < BOARD_SIZE && step.second < BOARD_SIZE && (int) board[step.first][step.second] == 0) {
+    if (step.first < BOARD_SIZE && step.second < BOARD_SIZE && (int) b.boardArray[step.first][step.second] == 0) {
         return true;
     } else {
-//        change color if player made mistake
         system("color C0");
         cout << "Wrong step!" << endl;
         return false;
     }
 }
 
-void Game::saveStep(pair<int, int> step) {
-    steps.push(step);
-}
-
 void Game::resetStep() {
-    if (!steps.empty()) {
-        pair<int, int> p = steps.top();
-        board[p.first][p.second] = 0;
+    if (!b.steps.empty()) {
+        pair<int, int> p = b.steps.top();
+        b.boardArray[p.first][p.second] = 0;
         player = !player;
         showBoard();
-        steps.pop();
-//        increase number of free cells if step is reset
-        countOfFree++;
+        b.steps.pop();
     } else {
         cout << "No steps to reset" << endl;
     }
@@ -379,12 +344,10 @@ void Game::play() {
             }
 
             if (stepIsCorrect(p)) {
-                saveStep(p);
                 setStep(p);
                 player = !player;
             }
-            if (check(p)) {
-//                change color of the console if game is over
+            if (checkAlgorithm.check(b)) {
                 system("color E0");
                 cout << "Game over! ";
                 if (!player) {
@@ -394,13 +357,100 @@ void Game::play() {
                 }
                 cout << " won!\nPrint 'new game' to start a new game" << endl;
                 return;
-            } else if (checkIfRaw()) {
+            } else if (checkAlgorithm.checkIfRaw(b)) {
                 cout << "It is raw!" << endl;
             }
             showBoard();
         }
     }
 }
+
+void Game::playWithAI() {
+    showBoard();
+
+    while (true) {
+        string cmd;
+        cin.sync();
+        getline(cin, cmd);
+        if (cmd == "options") {
+            cout << "new game --start new game" << endl;
+            cout << "reset --cancel the last step" << endl;
+            cout << "save --save the current game" << endl;
+            cout << "quit --quit the game" << endl;
+        } else if (cmd == "new game") {
+            newGame();
+        } else if (cmd == "reset") {
+            resetStep();
+            resetStep();
+            continue;
+        } else if (cmd == "save") {
+            save();
+            continue;
+        } else if (cmd == "quit") {
+            break;
+        } else {
+            pair<int, int> p = getPlayerMove(cmd);
+            if (p.first != -1 && p.second != -1) {
+                b.lastMove = p;
+                if (checkAlgorithm.check(b)) {
+                    system("color E0");
+                    cout << "Game over! ";
+                    if (!player) {
+                        cout << player1;
+                    } else {
+                        cout << "computer";
+                    }
+                    cout << " won!\nPrint 'new game' to start a new game" << endl;
+                    return;
+                } else if (checkAlgorithm.checkIfRaw(b)) {
+                    cout << "It is raw!" << endl;
+                }
+                showBoard();
+                aiPlayer.gameBoard = b;
+                pair<int, int> aiStep = aiPlayer.findBestMove();
+                b.boardArray[aiStep.first][aiStep.second] = 'O';
+                b.lastMove = aiStep;
+                setStep(aiStep);
+                player = !player;
+                showBoard();
+            }
+
+
+        }
+    }
+}
+
+pair<int, int> Game::getPlayerMove(string input) {
+    pair<char, char> step;
+    pair<int, int> p;
+    step.first = input[0];
+    step.second = input[2];
+
+    if ((int) step.first >= (int) '0' && (int) step.first <= (int) '9') {
+        p.first = step.first - '0';
+    } else {
+        p.first = 10 + step.first - 'A';
+    }
+
+    if ((int) step.second >= (int) '0' && (int) step.second <= (int) '9') {
+        p.second = step.second - '0';
+    } else {
+        p.second = 10 + step.second - 'A';
+    }
+
+    if (stepIsCorrect(p)) {
+        setStep(p);
+        player = !player;
+        b.lastMove = p;
+        return p;
+    } else {
+        p.first = -1;
+        p.second = -1;
+        return p;
+    }
+
+}
+
 
 void Game::start() {
     cout << "*******   WELCOME TO TIC TAC TOE!   *******" << endl;
@@ -417,8 +467,22 @@ void Game::start() {
         } else if (cmd == "history") {
             printHistory();
         } else if (cmd == "new game") {
-            initPlayers();
-            play();
+            string mode;
+            bool gameStarted = false;
+            while (!gameStarted) {
+                cout << "Choose game mode: \n 0 - play with computer \n 1 - play with friend" << endl;
+                cin >> mode;
+                if (mode == "0") {
+                    initPlayer();
+                    playWithAI();
+                    gameStarted = true;
+                } else if (mode == "1") {
+                    initPlayers();
+                    play();
+                    gameStarted = true;
+                } else cout << "Incorrect input" << endl;
+            }
+
         } else {
             stringstream s(cmd);
             string subCmd;
@@ -438,19 +502,7 @@ void Game::start() {
     }
 }
 
-//  check if there are empty cells
-bool Game::boardIsFull() {
-    return countOfFree == 0;
-}
-
-//  check if it is raw
-bool Game::checkIfRaw() {
-    return boardIsFull();
-}
-
-
 int main() {
-//    set main color of the game
     system("color B0");
     Game.start();
     return 0;
