@@ -57,13 +57,12 @@ private:
 
     void deleteHistory(int index);
 
-public:
-
-    void start();
-
     bool checkIfRaw();
 
     bool boardIsFull();
+
+public:
+    void start();
 } Game;
 
 
