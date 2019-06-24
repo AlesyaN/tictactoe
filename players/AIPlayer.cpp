@@ -58,7 +58,7 @@ int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
         return 0;
     }
 
-    if (isMax) {
+    if (isMax) { //max move
         int bestVal = -999;
         for (int i = start(gameBoard.steps.top().first); i <= end(gameBoard.steps.top().first); i++) {
             for (int j = start(gameBoard.steps.top().second); j <= end(gameBoard.steps.top().second); j++) {
@@ -76,7 +76,7 @@ int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
             }
         }
         return bestVal;
-    } else {
+    } else {//min move
         int bestVal = 999;
         for (int i = start(gameBoard.steps.top().first); i <= end(gameBoard.steps.top().first); i++) {
             for (int j = start(gameBoard.steps.top().second); j <= end(gameBoard.steps.top().second); j++) {

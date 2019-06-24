@@ -27,15 +27,15 @@ public:
     AIPlayer(Board &gameBoard);
 
 private:
-    int start(int i);
+    int start(int i); //finds first position around last user Move
 
-    int end(int i);
+    int end(int i); //last position
 
     int minimax(int depth, bool isMax, int alpha, int beta);
 
-    int estimate();
+    int estimate(); //estimates the chances of winning
 
-    bool isFreeCellsLeft();
+    bool isFreeCellsLeft(); //checks game board for emptiness
 };
 
 #endif
