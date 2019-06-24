@@ -102,7 +102,6 @@ void Game::newGame() {
 }
 
 void Game::setStep(pair<int, int> p) {
-    system("color B0");
     if (player) {
         b.boardArray[p.first][p.second] = 'X';
     } else {
@@ -275,8 +274,10 @@ void Game::showBoard() {
 }
 void Game::whoIsNext(){
     if (player) {
+        system("color E0");
         cout << player1 << " choose step: " << endl;
     } else {
+        system("color B0");
         cout << player2 << " choose step: " << endl;
     }
 }
@@ -330,8 +331,8 @@ void Game::play() {
             break;
         } else {
             pair<int, int> p = getPlayerMove(cmd);
-            if (checkAlgorithm.check(b)) {
-                system("color E0");
+            if (checkAlgorithm.check(b, b.steps.top())) {
+                system("color A0");
                 showBoard();
                 cout << "Game over! ";
                 if (!player) {
@@ -377,8 +378,8 @@ void Game::playWithAI() {
         } else {
             pair<int, int> p = getPlayerMove(cmd);
             if (p.first != -1 && p.second != -1) {
-                if (checkAlgorithm.check(b)) {
-                    system("color E0");
+                if (checkAlgorithm.check(b, b.steps.top())) {
+                    system("color A0");
                     showBoard();
                     cout << "Game over! ";
                     if (!player) {
@@ -489,7 +490,6 @@ void Game::start() {
 }
 
 int main() {
-    system("color B0");
     Game.start();
     return 0;
 }

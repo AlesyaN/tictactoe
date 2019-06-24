@@ -33,7 +33,7 @@ private:
 
     int minimax(int depth, bool isMax, int alpha, int beta);
 
-    int evaluate();
+    int estimate();
 
     bool isFreeCellsLeft();
 };

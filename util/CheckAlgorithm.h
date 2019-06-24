@@ -18,7 +18,7 @@ public:
 
     bool checkIfRaw(Board board);
 
-    bool check(Board board);
+    bool check(Board board, pair<int, int> checkStep);
 };
 
 

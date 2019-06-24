@@ -1,8 +1,8 @@
 #include "CheckAlgorithm.h"
 
-bool CheckAlgorithm::check(Board board) {
+bool CheckAlgorithm::check(Board board, pair<int,int> checkingStep) {
     int count = 0;
-    pair<int, int> step = board.steps.top();
+    pair<int, int> step = checkingStep;
 
     //diagonals and vertical
     for (int j = -1; j < 2; j++) {

@@ -42,8 +42,8 @@ int AIPlayer::end(int i) {
 
 int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
     auto board = gameBoard.boardArray;
-    int score = evaluate();
-    if (depth == 7)
+    int score = estimate();
+    if (depth == 9)
         return 0;
 
     if (score == 10) {
@@ -97,13 +97,13 @@ int AIPlayer::minimax(int depth, bool isMax, int alpha, int beta) {
     }
 }
 
-int AIPlayer::evaluate() {
+int AIPlayer::estimate() {
     CheckAlgorithm ca;
     auto board = gameBoard.boardArray;
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             pair<int, int> p(i, j);
-            if (board[i][j] == 'O' && ca.check(gameBoard)) {
+            if (board[i][j] == 'O' && ca.check(gameBoard, p)) {
                 return 10;
             }
         }
@@ -112,7 +112,7 @@ int AIPlayer::evaluate() {
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             pair<int, int> p(i, j);
-            if (board[i][j] == 'X' && ca.check(gameBoard)) {
+            if (board[i][j] == 'X' && ca.check(gameBoard, p)) {
                 return -10;
             }
         }
