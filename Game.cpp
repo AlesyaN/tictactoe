@@ -463,6 +463,7 @@ pair<int, int> Game::getPlayerMove(string input) {
 
 
 void Game::start() {
+    system("color F0");
     cout << "*******   WELCOME TO TIC TAC TOE!   *******" << endl;
     cout << "Print 'options' to see all commands" << endl;
 
