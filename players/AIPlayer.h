@@ -1,10 +1,5 @@
-#include <utility>
-#include <iostream>
-#include <string.h>
-#include <stack>
-#include <fstream>
-#include <ctime>
-#include <sstream>
+
+
 #include <algorithm>
 
 using namespace std;
@@ -31,9 +26,9 @@ private:
 
     int end(int i); //last position
 
-    int minimax(int depth, bool isMax, int alpha, int beta);
+    int minimax(Board board, int depth, bool isMax, int alpha, int beta);
 
-    int estimate(); //estimates the chances of winning
+    int estimate(Board board); //estimates the chances of winning
 
     bool isFreeCellsLeft(); //checks game board for emptiness
 };

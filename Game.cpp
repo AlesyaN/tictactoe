@@ -35,6 +35,7 @@ private:
     void play();
 
     void showBoard();
+
     void whoIsNext();
 
     bool stepIsCorrect(pair<int, int> step);
@@ -86,6 +87,7 @@ void Game::initPlayers() {
     player1 = std::move(name1);
     player2 = std::move(name2);
 }
+
 //get names of players in play with computer mode
 void Game::initPlayer() {
     cout << "Print your name: " << endl;
@@ -95,6 +97,7 @@ void Game::initPlayer() {
     aiPlayer = AIPlayer(b);
     player2 = "computer";
 }
+
 //creating a new Game object to start a new game
 void Game::newGame() {
     *this = Game();
@@ -293,7 +296,7 @@ void Game::showBoard() {
     }
 }
 
-void Game::whoIsNext(){
+void Game::whoIsNext() {
     if (player) {
         system("color E0");
         cout << player1 << " choose step: " << endl;
