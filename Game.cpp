@@ -68,7 +68,7 @@ public:
 } Game;
 
 
-//get names of players
+//get names of players in 2 players mode
 void Game::initPlayers() {
     string name1;
     string name2;
@@ -86,7 +86,7 @@ void Game::initPlayers() {
     player1 = std::move(name1);
     player2 = std::move(name2);
 }
-
+//get names of players in play with computer mode
 void Game::initPlayer() {
     cout << "Print your name: " << endl;
     cin.sync();
@@ -95,12 +95,13 @@ void Game::initPlayer() {
     aiPlayer = AIPlayer(b);
     player2 = "computer";
 }
-
+//creating a new Game object to start a new game
 void Game::newGame() {
     *this = Game();
     start();
 }
 
+//save step to the board and to the stack with steps
 void Game::setStep(pair<int, int> p) {
     if (player) {
         b.boardArray[p.first][p.second] = 'X';
@@ -110,10 +111,16 @@ void Game::setStep(pair<int, int> p) {
     b.steps.push(p);
 }
 
+
 void Game::deleteHistory(int index) {
+    //open output and input streams
     ifstream is(DB);
     ofstream ofs;
+
+    //create temporary file
     ofs.open("temp.csv", ofstream::out);
+
+    //copy from the original file everything except a line with certain index
     int line_no = 0;
     string line;
     while (getline(is, line, '\n')) {
@@ -122,32 +129,39 @@ void Game::deleteHistory(int index) {
         line_no++;
     }
 
+    //close streams
     ofs.close();
     is.close();
 
+    //delete old file
     remove(DB);
+    //rename new file
     rename("temp.csv", DB);
 }
 
 bool Game::initReplay(int index) {
+    //open input stream
     ifstream fin(DB);
     string line;
     string word;
     int i = 0;
+    //read every line in a file
     while (getline(fin, line)) {
+        //init replay for a line with certain index
         if (i == index) {
+            //temporary stack
             stack<pair<int, int>> temp;
 
             stringstream s(line);
-            getline(s, word, ',');
+            getline(s, word, ','); //skip first word in a line - timestamp
 
             getline(s, word, ',');
-            player1 = word;
+            player1 = word; //initializing name of 1 player
 
             getline(s, word, ',');
-            player2 = word;
+            player2 = word; //initializing name of 2 player
 
-
+            //fill temporary stack backwards
             while (getline(s, word, ',')) {
                 pair<int, int> step;
                 stringstream str(word);
@@ -164,31 +178,30 @@ bool Game::initReplay(int index) {
 
             player = true;
 
+            //fill an original stack
             while (!temp.empty()) {
-                b.steps.push(temp.top());
+                b.steps.push(temp.top()); //fill board
                 setStep(temp.top());
                 temp.pop();
                 player = !player;
             }
 
-//            player = b.steps.size() % 2 == 0;
+            fin.close(); //close input stream
+            deleteHistory(index); //delete line from history
 
-            fin.close();
-            deleteHistory(index);
-
-            return true;
+            return true; //true if this game initialized
         }
         i++;
     }
-    return false;
+    return false; //there is no game with this index
 }
 
 void Game::replay(int index) {
-    if (initReplay(index)) {
+    if (initReplay(index)) { //if there is a game with such index, initialize
         if (player2 != "computer") {
-            play();
+            play(); //start game with partner
         } else {
-            playWithAI();
+            playWithAI(); //start game with ai
         }
     } else {
         cout << "No game with " << index << " index";
@@ -197,15 +210,17 @@ void Game::replay(int index) {
 }
 
 void Game::save() {
-    ofstream fout(DB, ios::app);
-    time_t now = time(nullptr);
+    ofstream fout(DB, ios::app); //open output stream
+    time_t now = time(nullptr); //get current time
 
-    stack<pair<int, int>> current = b.steps;
+    stack<pair<int, int>> current = b.steps; //get steps from a board
 
+    //print time and names of players
     fout << now << ","
          << player1 << ","
          << player2 << ",";
 
+    //print history of steps from stack
     while (!current.empty()) {
         fout << current.top().first << ":" << current.top().second << ",";
         current.pop();
@@ -220,12 +235,14 @@ void Game::printHistory() {
     string word;
     cout << "HISTORY:" << endl;
     int i = 0;
+    //read every line in a file
     while (getline(fin, line)) {
         stringstream s(line);
-        cout << i << " ";
+        cout << i << " "; //index of game
 
         getline(s, word, ',');
 
+        //convert timestamp to a normal date and time
         time_t time = (time_t) stoi(word);
         tm *ltm = localtime(&time);
         cout << ltm->tm_hour << ":"
@@ -234,6 +251,8 @@ void Game::printHistory() {
              << ltm->tm_mday << "."
              << 1 + ltm->tm_mon << "."
              << 1900 + ltm->tm_year << " ";
+
+        //print history of steps
         while (getline(s, word, ',')) {
             cout << word << " ";
         }
@@ -247,7 +266,7 @@ void Game::printHistory() {
 
 
 void Game::showBoard() {
-
+    //first line with numbers and letters
     cout << "  ";
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (9 < i) {
@@ -258,6 +277,7 @@ void Game::showBoard() {
     }
     cout << endl;
 
+    //other lines
     for (int i = 0; i < BOARD_SIZE; i++) {
         if (9 < i) {
             cout << static_cast<char>('A' + i - 10) << "|";
@@ -272,6 +292,7 @@ void Game::showBoard() {
         cout << endl;
     }
 }
+
 void Game::whoIsNext(){
     if (player) {
         system("color E0");
@@ -283,6 +304,7 @@ void Game::whoIsNext(){
 }
 
 bool Game::stepIsCorrect(pair<int, int> step) {
+    //if the step is not out of bounds and not already reserved
     if (step.first < BOARD_SIZE && step.second < BOARD_SIZE && (int) b.boardArray[step.first][step.second] == 0) {
         return true;
     } else {
@@ -292,14 +314,15 @@ bool Game::stepIsCorrect(pair<int, int> step) {
     }
 }
 
+
 void Game::resetStep() {
-    if (!b.steps.empty()) {
+    if (!b.steps.empty()) { //if there is steps in stack
         pair<int, int> p = b.steps.top();
-        b.boardArray[p.first][p.second] = 0;
-        player = !player;
+        b.boardArray[p.first][p.second] = 0; //delete this step from board
+        player = !player; //change current player
         showBoard();
         whoIsNext();
-        b.steps.pop();
+        b.steps.pop(); //delete this step from stack
     } else {
         cout << "No steps to reset" << endl;
     }
